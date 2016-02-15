@@ -1,0 +1,18 @@
+<phpunit bootstrap="include/bootstrap.php">
+    <php>
+        <env name="CONFIG" value="debian8.conf"/>
+    </php>
+    <testsuites>
+        <testuite name="setup">
+            <file>setup/EasySCPSetupTest.php</file>
+        </testuite>
+        <testuite name="admin">
+            <file>admin/EasySCPAdminGeneralInformationTest.php</file>
+            <file>admin/EasySCPAdminManageUsersTest.php</file>
+         </testuite>
+        <testuite name="reseller">
+        </testuite>
+        <testuite name="user">
+        </testuite>
+    </testsuites>
+</phpunit>
