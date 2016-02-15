@@ -1,0 +1,96 @@
+# EasySCP a Virtual Hosting Control Panel
+# Copyright (C) 2010-2016 by Easy Server Control Panel - http://www.easyscp.net
+#
+# This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
+# To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/.
+#
+# @link 		http://www.easyscp.net
+# @author 		EasySCP Team
+
+HowTo prepare system for running Selenium tests
+================================================================================
+
+Table of Content
+================
+1) System Requirements
+2) Introduction
+3) Prepare EasySCP test system
+4) Prepare Testing system
+5) Credits
+
+1)  System Requirements
+================================================================================
+
+1)  Introduction
+================================================================================
+
+2)  Prepare EasySCP test system
+================================================================================
+As we run automated tests against a test server we have to prepare the environment to allow certain access to the system
+which should not be allowed on production systems. If you want to run these tests on a public available server you might
+need to consider creating firewall rules which allow access to your testing host only.
+
+1.  Install EasySCP
+    Install a server with EasySCP.
+    Follow the installation guide for your distribution until you reach the point 'Start the basic setup'. For our
+    test server this step slightly differs.
+    Run easyscp-setup.sh
+        # ./easyscp-setup.sh
+
+    Answer No to the question 'Secure your mysql installation [Y/N]?'. Do not finish your Setup now. This will be done
+    later when running our automated tests.
+
+2.  Allow remote connection to MySQL database
+    Edit /etc/mysql/my.cnf and comment out the line containing the bind-address:
+        #bind-address           = 127.0.0.1
+
+    Connect to MySQL and run the following SQL statement:
+        GRANT ALL PRIVILEGES ON *.* TO 'root'@'%'
+            IDENTIFIED BY 'easyscp'
+            WITH GRANT OPTION;
+        FLUSH PRIVILEGES;
+
+    Restart MySQL Server
+        # service mysql restart
+
+================================================================================
+3)  Prepare Testing system
+---------------
+
+1.  Install JRE
+    To run the Selenium Standalone Server a JRE needs to be installed on your testing system.
+
+2.  Download Selenium Standalone Server
+    Download the latest version of Selenium Standalone Server from http://docs.seleniumhq.org/download/
+
+3.  Install Unit testing suite for PHP5 and Selenium RC integration for PHPUnit
+    # apt-get install phpunit phpunit-selenium
+
+4.  Update configuration
+    Adjust environment specific information in the configuration file for your environment.
+
+    If you want to use different usernames and passwords you might want to change information in common.conf
+
+================================================================================
+4)  Run tests
+---------------
+1.  Start Selenium Standalone Server
+    java -jar selenium-server-standalone-2.50.1.jar
+
+2.  Start EasySCP test system
+    The best point to start with is a freshly installed server with EasySCP installed but not configured.
+
+2.  Run phpunit tests
+
+================================================================================
+5) Credits
+----------
+
+EasySCP-Test is a project of Easy Server Control Panel.
+EasySCP, Easy Server Control Panel and the EasySCP logo are trademarks of the EasySCP Project.
+
+Please visit our site under http://www.easyscp.net for further information on
+EasySCP and other themes.
+
+We hope you enjoy using EasySCP. If you like it, help us, to make it better. We
+would be glad on any help provided!
