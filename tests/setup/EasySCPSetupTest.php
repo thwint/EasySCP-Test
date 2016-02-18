@@ -55,9 +55,7 @@ class EasySCPSetupTest extends  EasySCPSelenium2Test
 		$element->clear();
 		$element->value($this->envconfig['dbpassword']);
 
-		if ($this->config['debug']===true){
-			sleep($this->config['sleeptime']);
-		}
+		$this->debugSleep();
 
 		$this->byName("Submit")->click();
 
@@ -110,9 +108,7 @@ class EasySCPSetupTest extends  EasySCPSelenium2Test
 		$element->clear();
 		$element->value($this->config['timezone']);
 
-		if ($this->config['debug']===true){
-			sleep($this->config['sleeptime']);
-		}
+		$this->debugSleep();
 
 		$this->byName("Submit")->click();
 

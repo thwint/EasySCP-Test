@@ -9,10 +9,17 @@
         <testuite name="admin">
             <file>admin/EasySCPAdminGeneralInformationTest.php</file>
             <file>admin/EasySCPAdminManageUsersTest.php</file>
-         </testuite>
-        <testuite name="reseller">
+            <file>admin/EasySCPAdminSystemToolsCronTest.php</file>
+            <file>admin/EasySCPAdminManageSSLTest.php</file>
         </testuite>
-        <testuite name="user">
+        <testuite name="reseller">
+            <file>reseller/EasySCPResellerManageHostingPlanTest.php</file>
+            <file>reseller/EasySCPResellerManageDomainTest.php</file>
+            <file>reseller/EasySCPResellerManageAliasTest.php</file>
+        </testuite>
+        <testuite name="client">
+            <file>client/EasySCPClientSubdomainTest.php</file>
+            <file>client/EasySCPClientManageSSLTest.php</file>
         </testuite>
     </testsuites>
 </phpunit>

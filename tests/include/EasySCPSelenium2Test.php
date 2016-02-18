@@ -66,4 +66,37 @@ abstract class EasySCPSelenium2Test extends PHPUnit_Extensions_Selenium2TestCase
 			sleep($this->config['sleeptime']);
 		}
 	}
+	/**
+	 * Read file from disk and return its content
+	 * @param $fileName
+	 * @return string
+	 */
+	protected function getFileContent($fileName){
+		$handle = fopen($fileName, "r") or die("Unable to open file!");
+		$content = fread($handle,filesize($fileName));
+		fclose($handle);
+		return $content;
+	}
+
+	/**
+	 * Verify if certificate CN matches domainname
+	 * @param $domainName
+	 * @return mixed
+	 */
+	protected function verifySSLInfo($domainName){
+		$g = stream_context_create(
+			array(
+				"ssl" => array(
+					"capture_peer_cert" => true,
+					"allow_self_signed" => true,
+					"verify_peer" => true
+				)
+			));
+		$r = fopen("https://" . $domainName, "rb", false, $g);
+		$cont = stream_context_get_params($r);
+		$certinfo = openssl_x509_parse($cont["options"]["ssl"]["peer_certificate"]);
+
+		return $certinfo['subject']['CN'];
+	}
+
 }

@@ -34,6 +34,9 @@ class EasySCPClientManageSSLTest extends EasySCPSelenium2Test
 		parent::tearDown();
 	}
 
+	/**
+	 * Test Add SSL to domain
+	 */
 	public function testAddSSLForDomain(){
 		$this->fillSSLForm($this->config['domain1']);
 
@@ -52,6 +55,9 @@ class EasySCPClientManageSSLTest extends EasySCPSelenium2Test
 
 	}
 
+	/**
+	 * Test Add SSL to alias
+	 */
 	public function testAddSSLForAlias(){
 		$this->fillSSLForm($this->config['domain2']);
 
@@ -69,6 +75,9 @@ class EasySCPClientManageSSLTest extends EasySCPSelenium2Test
 		$this->assertEquals($this->config['domain2'],$this->verifySSLInfo($this->config['domain2']));
 	}
 
+	/**
+	 * Test Add SSL to subdomain
+	 */
 	public function testAddSSLForSubdomain(){
 		$domainName = $this->config['sub1'] . '.' . $this->config['domain1'];
 		$this->fillSSLForm($domainName);
@@ -87,6 +96,9 @@ class EasySCPClientManageSSLTest extends EasySCPSelenium2Test
 		$this->assertEquals($domainName,$this->verifySSLInfo($domainName));
 	}
 
+	/**
+	 * Test Add SSL to subdomain alias
+	 */
 	public function testAddSSLForSubdomainAlias(){
 		$domainName = $this->config['sub1'] . '.' . $this->config['domain2'];
 		$this->fillSSLForm($domainName);
@@ -106,7 +118,7 @@ class EasySCPClientManageSSLTest extends EasySCPSelenium2Test
 	}
 
 	/**
-	 * Read fill in Form with SSL data
+	 * Fill in Form with SSL data
 	 */
 	private function fillSSLForm($domainName){
 		$cert = $this->getFileContent("config/ssl/" . $domainName .".crt");
@@ -133,35 +145,5 @@ class EasySCPClientManageSSLTest extends EasySCPSelenium2Test
 
 		// Sleep until apache is restarted
 		sleep(5);
-
 	}
-
-	/**
-	 * Read file from disk and return its content
-	 * @param $fileName
-	 * @return string
-	 */
-	private function getFileContent($fileName){
-		$handle = fopen($fileName, "r") or die("Unable to open file!");
-		$content = fread($handle,filesize($fileName));
-		fclose($handle);
-		return $content;
-	}
-
-	private function verifySSLInfo($domainName){
-		$g = stream_context_create(
-			array(
-				"ssl" => array(
-					"capture_peer_cert" => true,
-					"allow_self_signed" => true,
-					"verify_peer" => true
-				)
-			));
-		$r = fopen("https://" . $domainName, "rb", false, $g);
-		$cont = stream_context_get_params($r);
-		$certinfo = openssl_x509_parse($cont["options"]["ssl"]["peer_certificate"]);
-
-		return $certinfo['subject']['CN'];
-	}
-
 }
