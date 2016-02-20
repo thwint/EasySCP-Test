@@ -263,7 +263,11 @@ class EasySCPResellerManageHostingPlanTest extends EasySCPSelenium2Test
 
 		$this->url("/reseller/hosting_plan.php");
 
-		$this->byXPath("//td[contains(text(),'" . $templateName . "')]/../td/a[contains(@href,'hosting_plan_edit')]")->click();
+		$this->byXPath("//a[contains(text(),'" . $templateName . "')]/../../td/a[contains(@href,'hosting_plan_edit')]")->click();
+
+		$element = $this->byId("hp_sub");
+		$element->clear();
+		$element->value("5");
 
 		$element = $this->byId("hp_value");
 		$element->clear();
@@ -272,11 +276,16 @@ class EasySCPResellerManageHostingPlanTest extends EasySCPSelenium2Test
 		$this->debugSleep();
 
 		$this->byName("Submit")->click();
+		$sql_query = "SELECT * from hosting_plans where name = :templatename";
+		DB::prepare($sql_query);
+		$rs = DB::execute($sql_param,true);
+
+		$props = unserialize($rs['props']);
 
 		$this->assertEquals("_yes_",$props['allow_php']);
 		$this->assertEquals("_no_",$props['allow_phpe']);
 		$this->assertEquals("_yes_",$props['allow_cgi']);
-		$this->assertEquals("1",$props['subdomain_cnt']);
+		$this->assertEquals("5",$props['subdomain_cnt']);
 		$this->assertEquals("2",$props['alias_cnt']);
 		$this->assertEquals("3",$props['mail_cnt']);
 		$this->assertEquals("4",$props['ftp_cnt']);

@@ -1,6 +1,8 @@
-<phpunit bootstrap="include/bootstrap.php">
+<phpunit bootstrap="include/bootstrap.php"
+         colors="true"
+>
     <php>
-        <env name="CONFIG" value="debian8.conf"/>
+        <env name="CONFIG" value="debian_jessie.conf"/>
     </php>
     <testsuites>
         <testuite name="setup">
@@ -18,6 +20,7 @@
             <file>reseller/EasySCPResellerManageAliasTest.php</file>
         </testuite>
         <testuite name="client">
+            <file>client/EasySCPClientManageAliasTest.php</file>
             <file>client/EasySCPClientSubdomainTest.php</file>
             <file>client/EasySCPClientManageSSLTest.php</file>
         </testuite>

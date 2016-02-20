@@ -158,7 +158,7 @@ class EasySCPResellerManageUsersTest extends EasySCPSelenium2Test
 	public function testDeleteDomain(){
 		$this->url("reseller/users.php");
 
-		$this->byXPath("//a[contains(@href,'" . $this->config['domain2'] . "')]/../td/a[contains(@href,'domain_delete')]")->click();
+		$this->byXPath("//a[contains(@href,'" . $this->config['domain2'] . "')]/../../td/a[contains(@href,'domain_delete')]")->click();
 
 		$this->byId("delete")->click();
 

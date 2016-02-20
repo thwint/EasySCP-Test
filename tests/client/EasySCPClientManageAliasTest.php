@@ -37,7 +37,7 @@ class EasySCPManageAliasTest extends EasySCPSelenium2Test
 	 */
 	public function testAddAliasAsClient(){
 		$this->login($this->config['domain1'],$this->config['password']);
-
+		$this->url("/client/alias_add.php");
 		$element = $this->byId("ndomain_name");
 		$element->clear();
 		$element->value($this->config['domain2']);
@@ -65,7 +65,9 @@ class EasySCPManageAliasTest extends EasySCPSelenium2Test
 	public function testActivateAliasAsReseller(){
 		$this->login($this->config['reselleruser'],$this->config['password']);
 
-		$this->byXPath("//a[contains(@onclick,'" . $this->config['domain2'] . "') and contains(@href,'activate')]")->click();
+		$this->url("/reseller/alias.php");
+
+		$this->byXPath("//a[contains(@href,'" . $this->config['domain2'] . "')]/../../td/a[contains(@href,'activate')]")->click();
 
 		$success = $this->byClassName("success")->text();
 		$this->assertContains("Ordered domain alias activated!",$success);

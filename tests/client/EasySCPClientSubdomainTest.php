@@ -51,7 +51,7 @@ class EasySCPClientSubdomainTest extends EasySCPSelenium2Test
 		$this->byName("Submit")->click();
 
 		$success = $this->byClassName("success")->text();
-		$this->assertEquals("User added!",$success);
+		$this->assertEquals("Subdomain scheduled for addition!",$success);
 
 		$sql_param = array(
 			"domain_name" => $this->config['sub1'],
@@ -81,7 +81,7 @@ class EasySCPClientSubdomainTest extends EasySCPSelenium2Test
 		$this->byName("Submit")->click();
 
 		$success = $this->byClassName("success")->text();
-		$this->assertEquals("User added!",$success);
+		$this->assertEquals("Subdomain scheduled for addition!",$success);
 
 		$sql_param = array(
 			"domain_name" => $this->config['sub1'],

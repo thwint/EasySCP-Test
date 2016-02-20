@@ -8,5 +8,5 @@ openssl req \
     -nodes \
     -x509 \
     -subj "/C=DE/ST=Bern/L=Safnern/O=EasySCP/CN=${domain}" \
-    -keyout ${domain}.key \
-    -out ${domain}.crt
+    -keyout ../tests/config/ssl/${domain}.key \
+    -out ../tests/config/ssl/${domain}.crt
