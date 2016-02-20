@@ -1,0 +1,95 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure(2) do |config|
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  ######################################################################################################################
+  # Debian based distributions
+  ############################
+  # Debian 7 Jessie
+    # Coming soon ...
+  # Debian 8 Jessie
+    config.vm.define :jessie do |jessie_config|
+        jessie_config.vm.box = "ARTACK/debian-jessie"
+        jessie_config.vm.hostname = "jessie.easyscp.ch"
+        jessie_config.vm.box_url = "https://atlas.hashicorp.com/ARTACK/boxes/debian-jessie"
+        jessie_config.vm.network "public_network", bridge: 'virtualnetwork0', ip: "192.168.230.14"
+
+        jessie_config.vm.provision "shell", inline: <<-SHELL
+            sudo apt-get update
+            sudo apt-get install -y puppet
+        SHELL
+
+        jessie_config.vm.provision :puppet do |puppet|
+            puppet.manifests_path = "puppet/manifests"
+            puppet.manifest_file = "deb_based.pp"
+            puppet.module_path = "puppet/modules"
+        end
+    end
+  # Ubuntu 12.04 Precise
+    # Coming soon ...
+  # Ubuntu 14.04 Trusty
+    config.vm.define :trusty do |trusty_config|
+        trusty_config.vm.box = "ubuntu/trusty64"
+        trusty_config.vm.hostname = "trusty.easyscp.ch"
+        trusty_config.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/trusty64"
+        trusty_config.vm.network "public_network", bridge: 'virtualnetwork0', ip: "192.168.230.12"
+
+        trusty_config.vm.provision "shell", inline: <<-SHELL
+            sudo apt-get update
+            sudo apt-get install -y puppet
+        SHELL
+
+        trusty_config.vm.provision :puppet do |puppet|
+            puppet.manifests_path = "puppet/manifests"
+            puppet.manifest_file = "deb_based.pp"
+            puppet.module_path = "puppet/modules"
+        end
+    end
+  # Ubuntu 16.04 Xenial
+    # Coming soon ...
+  ######################################################################################################################
+  # RPM based distributions
+  #########################
+  # CentOS 6
+    # Coming soon ...
+  # CentOS 7
+    config.vm.define :centos7 do |centos7_config|
+        centos7_config.vm.box = "centos/7"
+        centos7_config.vm.hostname = "centos7.easyscp.ch"
+        #centos7_config.vm.box_url = "https://atlas.hashicorp.com/puppetlabs/boxes/centos-7.0-64-puppet/versions/1.0.2/providers/virtualbox.box"
+        centos7_config.vm.box_url = "https://atlas.hashicorp.com/centos/7"
+        #https://atlas.hashicorp.com/centos/boxes/7/versions/1601.01/providers/virtualbox.box
+        centos7_config.vm.network "public_network", bridge: 'virtualnetwork0', ip: "192.168.230.30"
+
+        centos7_config.vm.provision :puppet do |puppet|
+            puppet.manifests_path = "puppet/manifests"
+            puppet.manifest_file = "rpm_based.pp"
+            puppet.module_path = "puppet/modules"
+        end
+    end
+  #Oracle Linux 7
+    config.vm.define :oracle7 do |oracle7_config|
+        oracle7_config.vm.box = "oraclelinux-7"
+        oracle7_config.vm.hostname = "oracle7.easyscp.ch"
+        oracle7_config.vm.box_url = "http://cloud.terry.im/vagrant/oraclelinux-7-x86_64.box"
+        oracle7_config.vm.network "public_network", bridge: 'virtualnetwork0', ip: "192.168.230.30"
+
+        centos7_config.vm.provision "shell", inline: <<-SHELL
+            sudo apt-get install -y puppet
+        SHELL
+
+        oracle7_config.vm.provision :puppet do |puppet|
+            puppet.manifests_path = "puppet/manifests"
+            puppet.manifest_file = "rpm_based.pp"
+            puppet.module_path = "puppet/modules"
+        end
+    end
+  ######################################################################################################################
+end
