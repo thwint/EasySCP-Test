@@ -202,6 +202,8 @@ class EasySCPAdminSystemToolsCronTest extends EasySCPSelenium2Test
 
 		$this->byXPath("//td[contains(text(),'" . $cronName . "')]/../td/a[contains(@href,'edit_cron')]")->click();
 
+		$this->timeouts()->implicitWait(20000);
+
 		$element = $this->byId("minute_expert");
 		$element->clear();
 		$element->value("5");
@@ -209,6 +211,8 @@ class EasySCPAdminSystemToolsCronTest extends EasySCPSelenium2Test
 		$this->debugSleep();
 
 		$this->byName("Submit")->click();
+
+		$this->timeouts()->implicitWait(20000);
 
 		$sql_param = array(
 			"cronname" => $cronName,
@@ -232,6 +236,8 @@ class EasySCPAdminSystemToolsCronTest extends EasySCPSelenium2Test
 		$this->byXPath("//a[contains(@onclick, '" . $cronName . "') and contains(@onclick, 'action_status')]")->click();
 		$this->acceptAlert();
 
+		$this->timeouts()->implicitWait(20000);
+
 		$sql_param = array(
 			"cronname" => $cronName,
 		);
@@ -243,6 +249,8 @@ class EasySCPAdminSystemToolsCronTest extends EasySCPSelenium2Test
 
 		$this->byXPath("//a[contains(@onclick, '" . $cronName . "') and contains(@onclick, 'action_status')]")->click();
 		$this->acceptAlert();
+
+		$this->timeouts()->implicitWait(20000);
 
 		DB::prepare($sql_query);
 		$rs = DB::execute($sql_param,true);

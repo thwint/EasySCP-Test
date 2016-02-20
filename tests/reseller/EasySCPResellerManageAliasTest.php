@@ -52,6 +52,8 @@ class EasySCPResellerManageAliasTest extends EasySCPSelenium2Test
 
 		$this->byName("Submit")->click();
 
+		$this->timeouts()->implicitWait(20000);
+
 		$success = $this->byClassName("success")->text();
 		$this->assertEquals("Domain alias added!",$success);
 
@@ -73,8 +75,9 @@ class EasySCPResellerManageAliasTest extends EasySCPSelenium2Test
 		$this->url("/reseller/alias.php");
 
 		$this->byXPath("//a[contains(@onclick,'" . $this->config['domain2'] . "') and contains(@onclick,'alias_delete')]")->click();
-
 		$this->acceptAlert();
+
+		$this->timeouts()->implicitWait(20000);
 
 		$sql_param = array(
 			"domain_name" => $this->config['domain2'],

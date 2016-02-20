@@ -59,6 +59,8 @@ class EasySCPAdminManageUsersTest extends EasySCPSelenium2Test
 
 		$this->byName("Submit")->click();
 
+		$this->timeouts()->implicitWait(20000);
+
 		$success = $this->byClassName("success")->text();
 		$this->assertEquals("User added successfully",$success);
 
@@ -133,6 +135,8 @@ class EasySCPAdminManageUsersTest extends EasySCPSelenium2Test
 
 		$this->byName("Submit")->click();
 
+		$this->timeouts()->implicitWait(20000);
+
 		$success = $this->byClassName("success")->text();
 		$this->assertEquals("Reseller added successfully",$success);
 
@@ -157,6 +161,8 @@ class EasySCPAdminManageUsersTest extends EasySCPSelenium2Test
 
 		$this->byXPath("//a[contains(@onclick, 'admin2')]")->click();
 		$this->acceptAlert();
+
+		$this->timeouts()->implicitWait(20000);
 
 		$this->debugSleep();
 

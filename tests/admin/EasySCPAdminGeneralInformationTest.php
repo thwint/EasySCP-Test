@@ -25,6 +25,7 @@ class EasySCPAdminGeneralInformationTest extends EasySCPSelenium2Test
 	public function setUp()
 	{
 		parent::setUp();
+		$this->login($this->config['adminuser'],$this->config['password']);
 	}
 
 	public function tearDown()
@@ -36,8 +37,7 @@ class EasySCPAdminGeneralInformationTest extends EasySCPSelenium2Test
 	 * Test changing the password of the admin user
 	 */
 	public function testPasswordChange(){
-		$this->login($this->config['adminuser'],$this->config['password']);
-		$this->byLinkText("Change password")->click();
+		$this->url("/admin/password_change.php");
 
 		$element = $this->byId("curr_pass");
 		$element->clear();
@@ -54,12 +54,14 @@ class EasySCPAdminGeneralInformationTest extends EasySCPSelenium2Test
 		$this->debugSleep();
 
 		$this->byName("Submit")->click();
+
+		$this->timeouts()->implicitWait(20000);
 
 		$success = $this->byClassName("success")->text();
 		$this->assertEquals("User password updated successfully!",$success);
 
 		// set password back to original
-		$this->byLinkText("Change password")->click();
+		$this->url("/admin/password_change.php");
 
 		$element = $this->byId("curr_pass");
 		$element->clear();
@@ -77,9 +79,10 @@ class EasySCPAdminGeneralInformationTest extends EasySCPSelenium2Test
 
 		$this->byName("Submit")->click();
 
+		$this->timeouts()->implicitWait(20000);
+
 		$success = $this->byClassName("success")->text();
 		$this->assertEquals("User password updated successfully!",$success);
-
 
 		$this->logout();
 	}
@@ -88,8 +91,7 @@ class EasySCPAdminGeneralInformationTest extends EasySCPSelenium2Test
 	 * Initially no personal data is filled. This test will fill all personal data and check directly in the database
 	 */
 	public function testChangePersonalData(){
-		$this->login($this->config['adminuser'],$this->config['password']);
-		$this->byLinkText("Change personal data")->click();
+		$this->url("/admin/personal_change.php");
 
 		$firstName = "First name";
 		$lastName = "Last name";

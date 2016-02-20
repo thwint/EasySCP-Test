@@ -56,7 +56,7 @@ class EasySCPResellerManageHostingPlanTest extends EasySCPSelenium2Test
 
 		$element = $this->byId("hp_sub");
 		$element->clear();
-		$element->value("1");
+		$element->value("5");
 
 		$element = $this->byId("hp_als");
 		$element->clear();
@@ -128,7 +128,7 @@ class EasySCPResellerManageHostingPlanTest extends EasySCPSelenium2Test
 		$this->assertEquals("_yes_",$props['allow_php']);
 		$this->assertEquals("_no_",$props['allow_phpe']);
 		$this->assertEquals("_yes_",$props['allow_cgi']);
-		$this->assertEquals("1",$props['subdomain_cnt']);
+		$this->assertEquals("5",$props['subdomain_cnt']);
 		$this->assertEquals("2",$props['alias_cnt']);
 		$this->assertEquals("3",$props['mail_cnt']);
 		$this->assertEquals("4",$props['ftp_cnt']);
@@ -230,6 +230,8 @@ class EasySCPResellerManageHostingPlanTest extends EasySCPSelenium2Test
 
 		$this->byName("Submit")->click();
 
+		$this->timeouts()->implicitWait(20000);
+
 		$sql_param = array(
 			"templatename" => $templateName,
 		);
@@ -272,6 +274,8 @@ class EasySCPResellerManageHostingPlanTest extends EasySCPSelenium2Test
 		$element = $this->byId("hp_value");
 		$element->clear();
 		$element->value("EUR");
+
+		$this->timeouts()->implicitWait(20000);
 
 		$this->debugSleep();
 
@@ -318,6 +322,8 @@ class EasySCPResellerManageHostingPlanTest extends EasySCPSelenium2Test
 
 		$this->byXPath("//a[contains(@onclick, 'tmpHostingplan') and contains(@onclick, 'action_delete')]")->click();
 		$this->acceptAlert();
+
+		$this->timeouts()->implicitWait(20000);
 
 		$sql_param = array(
 			"hostingplan" => 'tmpHostingplan',
