@@ -1,4 +1,4 @@
-# == Class: baseconfig
+# == Class: easyscp
 #
 # Install EasySCP and depending packages
 #
@@ -27,19 +27,19 @@ class easyscp {
       exec { "debconf-${lsbdistcodename}-easyscp":
         command => "/usr/bin/debconf-set-selections puppet:///modules/easyscp/files/$lsbdistcodename/easyscp.preseed",
       }
-      exec { "mysql-${lsbdistcodename}-bind":
-        command => "/bin/sed -i \"s/.*bind-address.*/bind-address = 0.0.0.0/\" /etc/mysql/my.cnf",
-        require => Exec["easyscp-${lsbdistcodename}-pkgs"]
-      }
       exec { "restart-${lsbdistcodename}-mysql":
         command => "/usr/sbin/service mysql restart",
         require => Exec[ "mysql-${lsbdistcodename}-bind" ],
       }
     }
+    oraclelinux: {
+
+    }
   }
 
   case $lsbdistcodename {
     wheezy: {
+      $my_cnf = [ '/etc/mysql/my.cnf' ]
       exec { "easyscp-${lsbdistcodename}-pkgs":
         command  => "/usr/bin/debconf-set-selections puppet:///modules/easyscp/files/$lsbdistcodename/easyscp.preseed;
                      /usr/bin/apt-get -y install $(cat /root/EasySCP/docs/Debian/debian-packages-7)",
@@ -48,6 +48,7 @@ class easyscp {
       }
     }
     jessie: {
+      $my_cnf = [ '/etc/mysql/my.cnf' ]
       exec { "easyscp-${lsbdistcodename}-pkgs":
         command  => "/usr/bin/debconf-set-selections puppet:///modules/easyscp/files/$lsbdistcodename/easyscp.preseed;
                      /usr/bin/apt-get -y install $(cat /root/EasySCP/docs/Debian/debian-packages-8)",
@@ -56,6 +57,7 @@ class easyscp {
       }
     }
     precise: {
+      $my_cnf = [ '/etc/mysql/my.cnf' ]
       exec { "easyscp-${lsbdistcodename}-pkgs":
         command  => "/usr/bin/debconf-set-selections puppet:///modules/easyscp/files/$lsbdistcodename/easyscp.preseed;
                      /usr/bin/apt-get -y install $(cat /root/EasySCP/docs/Ubuntu/ubuntu-packages-1204)",
@@ -64,6 +66,7 @@ class easyscp {
       }
     }
     trusty: {
+      $my_cnf = [ '/etc/mysql/my.cnf' ]
       exec { "easyscp-${lsbdistcodename}-pkgs":
         command  => "/usr/bin/debconf-set-selections puppet:///modules/easyscp/files/$lsbdistcodename/easyscp.preseed;
                      /usr/bin/apt-get -y install $(cat /root/EasySCP/docs/Ubuntu/ubuntu-packages-1404)",
@@ -78,6 +81,7 @@ class easyscp {
       }
     }
     xenial: {
+      $my_cnf = [ '/etc/mysql/mysql.conf.d/mysqld.cnf' ]
       exec { "easyscp-${lsbdistcodename}-pkgs":
         command  => "/usr/bin/debconf-set-selections puppet:///modules/easyscp/files/$lsbdistcodename/easyscp.preseed;
                      /usr/bin/apt-get -y install $(cat /root/EasySCP/docs/Ubuntu/ubuntu-packages-1604)",
@@ -86,7 +90,10 @@ class easyscp {
       }
     }
   }
-
+  exec { "mysql-${lsbdistcodename}-bind":
+    command => "/bin/sed -i \"s/.*bind-address.*/bind-address = 0.0.0.0/\" ${my_cnf}",
+    require => Exec["easyscp-${lsbdistcodename}-pkgs"]
+  }
   exec { "mysql-password":
     unless => "mysqladmin -uroot -peasyscp status",
     path => "/bin:/usr/bin",

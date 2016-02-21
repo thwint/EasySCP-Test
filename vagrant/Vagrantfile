@@ -12,8 +12,24 @@ Vagrant.configure(2) do |config|
   ######################################################################################################################
   # Debian based distributions
   ############################
-  # Debian 7 Jessie
-    # Coming soon ...
+  # Debian 7 Wheezy
+     config.vm.define :wheezy do |wheezy_config|
+         wheezy_config.vm.box = "puppetlabs/debian-7.8-64-puppet"
+         wheezy_config.vm.hostname = "wheezy.easyscp.ch"
+         wheezy_config.vm.box_url = "https://atlas.hashicorp.com/puppetlabs/debian-7.8-64-puppet"
+         wheezy_config.vm.network "public_network", bridge: 'virtualnetwork0', ip: "192.168.230.15"
+
+         wheezy_config.vm.provision "shell", inline: <<-SHELL
+             sudo apt-get update
+             sudo apt-get install -y puppet
+         SHELL
+
+         wheezy_config.vm.provision :puppet do |puppet|
+             puppet.manifests_path = "puppet/manifests"
+             puppet.manifest_file = "deb_based.pp"
+             puppet.module_path = "puppet/modules"
+         end
+     end
   # Debian 8 Jessie
     config.vm.define :jessie do |jessie_config|
         jessie_config.vm.box = "ARTACK/debian-jessie"
@@ -33,7 +49,23 @@ Vagrant.configure(2) do |config|
         end
     end
   # Ubuntu 12.04 Precise
-    # Coming soon ...
+    config.vm.define :precise do |precise_config|
+        precise_config.vm.box = "ubuntu/precise64"
+        precise_config.vm.hostname = "precise.easyscp.ch"
+        precise_config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+        precise_config.vm.network "public_network", bridge: 'virtualnetwork0', ip: "192.168.230.11"
+
+        precise_config.vm.provision "shell", inline: <<-SHELL
+            sudo apt-get update
+            sudo apt-get install -y puppet
+        SHELL
+
+        precise_config.vm.provision :puppet do |puppet|
+            puppet.manifests_path = "puppet/manifests"
+            puppet.manifest_file = "deb_based.pp"
+            puppet.module_path = "puppet/modules"
+        end
+    end
   # Ubuntu 14.04 Trusty
     config.vm.define :trusty do |trusty_config|
         trusty_config.vm.box = "ubuntu/trusty64"
@@ -53,6 +85,24 @@ Vagrant.configure(2) do |config|
         end
     end
   # Ubuntu 16.04 Xenial
+    config.vm.define :xenial do |xenial_config|
+        xenial_config.vm.box = "easyscp/xenial"
+#        xenial_config.vm.hostname = "xenial.easyscp.ch"
+        xenial_config.vm.box_url = "https://atlas.hashicorp.com/easyscp/xenial"
+        xenial_config.vm.network "public_network", bridge: 'virtualnetwork0', ip: "192.168.230.13"
+
+        xenial_config.vm.provision "shell", inline: <<-SHELL
+            hostnamectl set-hostname xenial.easyscp.ch
+            sudo apt-get update
+            sudo apt-get install -y puppet
+        SHELL
+
+        xenial_config.vm.provision :puppet do |puppet|
+            puppet.manifests_path = "puppet/manifests"
+            puppet.manifest_file = "deb_based.pp"
+            puppet.module_path = "puppet/modules"
+        end
+    end
     # Coming soon ...
   ######################################################################################################################
   # RPM based distributions
@@ -63,9 +113,7 @@ Vagrant.configure(2) do |config|
     config.vm.define :centos7 do |centos7_config|
         centos7_config.vm.box = "centos/7"
         centos7_config.vm.hostname = "centos7.easyscp.ch"
-        #centos7_config.vm.box_url = "https://atlas.hashicorp.com/puppetlabs/boxes/centos-7.0-64-puppet/versions/1.0.2/providers/virtualbox.box"
         centos7_config.vm.box_url = "https://atlas.hashicorp.com/centos/7"
-        #https://atlas.hashicorp.com/centos/boxes/7/versions/1601.01/providers/virtualbox.box
         centos7_config.vm.network "public_network", bridge: 'virtualnetwork0', ip: "192.168.230.30"
 
         centos7_config.vm.provision :puppet do |puppet|
@@ -79,10 +127,11 @@ Vagrant.configure(2) do |config|
         oracle7_config.vm.box = "oraclelinux-7"
         oracle7_config.vm.hostname = "oracle7.easyscp.ch"
         oracle7_config.vm.box_url = "http://cloud.terry.im/vagrant/oraclelinux-7-x86_64.box"
-        oracle7_config.vm.network "public_network", bridge: 'virtualnetwork0', ip: "192.168.230.30"
+        oracle7_config.vm.network "public_network", bridge: 'virtualnetwork0', ip: "192.168.230.32"
 
-        centos7_config.vm.provision "shell", inline: <<-SHELL
-            sudo apt-get install -y puppet
+        oracle7_config.vm.provision "shell", inline: <<-SHELL
+            yum -y update
+            yum -y install puppet
         SHELL
 
         oracle7_config.vm.provision :puppet do |puppet|

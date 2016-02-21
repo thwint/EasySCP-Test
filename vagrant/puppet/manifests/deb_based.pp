@@ -8,5 +8,8 @@ Stage['main'] -> Stage['post']
 class { 'deb_common_packages':
   stage => pre,
 }
+class { 'post_installation':
+  stage => post,
+}
 
-include common_config, deb_common_packages, easyscp
+include common_config, deb_common_packages, easyscp, post_installation
